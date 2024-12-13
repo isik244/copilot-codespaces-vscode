@@ -1,0 +1,90 @@
+import pandas as pd
+
+# Genişletilmiş malzeme veri tabanı
+data = {
+    "Malzeme Adı": [
+        "AISI 316 Paslanmaz Çelik", "Alüminyum 6061-T6", "Bakır", "Titanyum Ti-6Al-4V", "Polipropilen",
+        "Polietilen", "Cam Elyaf", "Karbon Çelik", "Süper Alaşım Inconel 718", "Naylon 66",
+        "PVC", "Pirinç", "Silikon Kauçuk", "Polikarbonat", "Akrilik", "Duralumin", "Magnezyum Alaşımı AZ31",
+        "Çinko Alaşımı", "Grafit", "Kevlar", "Epoksi", "Kurşun", "Altın", "Gümüş", "Platin", "Alüminyum 2024",
+        "Bronz", "Çelik AISI 1045", "Bakır-Tungsten", "Alümina Seramik", "Karbon Fiber",
+        "Polyether Ether Ketone (PEEK)", "Fluoropolimer", "Molibden", "Kobalt Alaşımı", "Titanyum Beta-C",
+        "Nikel", "Nikel Krom Alaşımı", "Paslanmaz Çelik 304", "PTFE", "PP Polipropilen",
+        "ABS Plastik", "Polistiren", "Alüminyum 7075", "Berilyum Bakır", "Kalay", "Çinko", "Kurşun",
+        "Elastomer", "Paslanmaz Çelik 316L"
+    ],
+    "Çekme Mukavemeti (MPa)": [
+        580, 310, 210, 900, 35, 20, 1500, 550, 1240, 80, 50, 400, 8, 65, 70, 490, 275, 330, 40, 3750,
+        60, 18, 15, 120, 140, 470, 550, 570, 680, 330, 600, 100, 35, 480, 850, 1100, 650, 800, 620,
+        600, 25, 40, 35, 520, 410, 30, 300, 20, 5, 485
+    ],
+    "Korozyon Dayanımı": [
+        1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 1,
+        0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        0, 0, 1, 1, 0, 0, 1, 1, 1, 1
+    ],
+    "Yoğunluk (g/cm³)": [
+        8.0, 2.7, 8.9, 4.5, 0.9, 0.95, 2.5, 7.8, 8.19, 1.14, 1.4, 8.5, 1.1, 1.2, 1.18, 2.8, 1.8, 6.6,
+        2.2, 1.44, 1.3, 11.3, 19.3, 10.5, 21.4, 2.78, 8.7, 7.85, 14.0, 3.97, 1.6, 1.3, 2.1, 10.2, 8.4,
+        4.4, 8.8, 8.4, 8.0, 2.2, 0.9, 1.05, 1.04, 2.8, 8.3, 7.3, 7.1, 11.3, 1.5, 8.0
+    ],
+    "Termal İletkenlik (W/m·K)": [
+        16.2, 167, 398, 6.7, 0.22, 0.4, 1.2, 50, 11.4, 0.25, 0.19, 120, 0.3, 0.2, 0.21, 130, 150, 116,
+        10, 0.04, 0.1, 35, 320, 430, 72, 130, 60, 80, 170, 20, 0.3, 0.25, 0.26, 138, 15, 7.3, 90, 60,
+        15.0, 0.23, 0.22, 0.17, 0.05, 170, 125, 65, 115, 35, 0.12, 16
+    ],
+    "Maliyet (TL/kg)": [
+        30, 20, 60, 120, 5, 3, 50, 18, 200, 10, 8, 40, 6, 7, 6, 25, 15, 30, 20, 300, 12, 2, 1800, 1500,
+        2000, 27, 50, 10, 150, 80, 90, 120, 110, 70, 100, 180, 120, 130, 60, 12, 4, 7, 6, 25, 90, 50,
+        30, 10, 15, 28
+    ],
+    "Çevresel Uygunluk": [
+        0.8, 0.9, 0.7, 0.6, 0.95, 0.9, 0.75, 0.7, 0.55, 0.85, 0.6, 0.8, 0.9, 0.88, 0.87, 0.8, 0.7, 0.6,
+        0.95, 0.9, 0.88, 0.4, 0.3, 0.5, 0.2, 0.9, 0.6, 0.85, 0.6, 0.7, 0.88, 0.85, 0.7, 0.6, 0.55, 0.65,
+        0.75, 0.8, 0.85, 0.9, 0.92, 0.85, 0.82, 0.7, 0.8, 0.75, 0.6, 0.4, 0.85, 0.88
+    ]
+}
+
+# DataFrame oluştur
+df = pd.DataFrame(data)
+
+# CSV olarak kaydet
+df.to_csv("malzeme_veritabani.csv", index=False)
+
+print("CSV dosyası 'malzeme_veritabani.csv' olarak kaydedildi.")
+
+import pandas as pd
+
+# Malzeme veri tabanını yükleyelim
+df = pd.read_csv("malzeme_veritabani.csv")
+
+# Kullanıcıdan kriter bilgilerini alın
+print("Malzeme seçimi için kriterleri giriniz:")
+cekme_mukavemeti = float(input("Minimum çekme mukavemeti (MPa): "))
+korozyon_dayanikli = input("Korozyona dayanıklı olsun mu? (Evet/Hayır): ").lower() == "evet"
+maks_maliyet = float(input("Maksimum maliyet (TL/kg): "))
+cevre_uygunluk = float(input("Minimum çevresel uygunluk (0-1 arası): "))
+
+# Kriterlere göre filtreleme yap
+uygun_malzemeler = df[
+    (df["Çekme Mukavemeti (MPa)"] >= cekme_mukavemeti) &
+    ((df["Korozyon Dayanımı"] == 1) if korozyon_dayanikli else True) &
+    (df["Maliyet (TL/kg)"] <= maks_maliyet) &
+    (df["Çevresel Uygunluk"] >= cevre_uygunluk)
+]
+
+# Eğer uygun malzeme varsa puanlama yaparak en iyisini seç
+if not uygun_malzemeler.empty:
+    # Puan hesaplama (basit bir örnek)
+    uygun_malzemeler["Puan"] = (
+        uygun_malzemeler["Çekme Mukavemeti (MPa)"] * 0.4 +
+        (1 / uygun_malzemeler["Maliyet (TL/kg)"]) * 0.3 +
+        uygun_malzemeler["Çevresel Uygunluk"] * 0.3
+    )
+    
+    # En yüksek puanlı malzemeyi seç
+    en_ideal_malzeme = uygun_malzemeler.sort_values(by="Puan", ascending=False).iloc[0]
+    print("\nEn ideal malzeme:", en_ideal_malzeme["Malzeme Adı"])
+    print(en_ideal_malzeme)
+else:
+    print("Kriterlere uygun malzeme bulunamadı.")
